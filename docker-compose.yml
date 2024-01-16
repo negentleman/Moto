@@ -1,0 +1,35 @@
+version: '3.3'
+services:
+    backend:
+        build:
+            dockerfile: ./backend/Dockerfile
+            context: ./
+        command: python -m uvicorn main:app --reload --host 0.0.0.0
+        ports:
+            - '8000:8000'
+        volumes:
+            - ./backend:/backend
+        env_file:
+            - .env
+        depends_on:
+            - postgres
+    postgres:
+        restart: always
+        image: postgres
+        volumes:
+            - ./sql/init_innotter.sql:/docker-entrypoint-initdb.d/create_tables.sql
+        environment:
+            POSTGRES_USER: postgres
+            POSTGRES_PASSWORD: postgres
+            POSTGRES_DB: postgres
+        ports:
+            - '5434:5432'
+    frontend:
+        build:
+            context: frontend
+            dockerfile: Dockerfile
+        command: /start
+        ports:
+            - '3000:3000'
+        volumes:
+            - ./frontend:/frontend
