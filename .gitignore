@@ -2,9 +2,6 @@
 venv/
 __pycache__/
 
-# Ignore Node.js modules
-node_modules/
-
 # Ignore compiled Python files
 *.pyc
 *.pyo
